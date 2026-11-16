@@ -31,6 +31,15 @@ After any change: run the tests, do one `--no-open` run, and load `results.html`
   --dump-dom "file://$PWD/results.html#intern:open" | grep -c "<article"
 ```
 
+## The website (GitHub Pages)
+
+The repository is public at `github.com/Facha003/internship-finder` and `.github/workflows/publish.yml` runs `finder.py --no-open` on GitHub (every 2 hours in the daytime, on push to main, and on demand), then deploys `results.html` as `index.html` to `https://facha003.github.io/internship-finder/`. `cache/` is carried between runs with `actions/cache` (new key each run, `restore-keys` prefix); deleting the caches in the Actions tab is the same as deleting `cache/` locally. A failed run leaves the last good page online. Check a run with `gh run list` / `gh run view --log-failed`.
+
+- Everything pushed is public. Rule 6 (no secrets in files) now also means: no personal details in `config.json` (`gruppe` holds placeholders; the real ones are typed into the page and stay in localStorage).
+- The page tells the two apart with `HOSTED` (`location.protocol !== "file:"`) and words its warnings accordingly. localStorage on the website is a different origin from `file://`, so tracking is separate; Back up / Restore moves it.
+- Email alerts are off there (no Keychain, `keychain_get` returns "" and the source reports "not set up"). To enable them, read the address and password from repository secrets as environment variables; never put them in `config.json`.
+- The local launch agent and the website run independently, each with its own cache, so "New" badges can differ slightly.
+
 ## Data flow
 
 ```

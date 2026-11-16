@@ -9,6 +9,16 @@ One page with two modes, switched at the top right and remembered between visits
 
 Double-click **Finn bedrifter.command** (or run `python3 finder.py`). It fetches everything and opens the page. The very first run takes a few minutes; later runs about a minute.
 
+### As a website
+
+The page is also online at **https://facha003.github.io/internship-finder/**, so you can open it from a phone or another computer. GitHub runs the program every 2 hours during the day and puts the new page there; this Mac does not need to be on.
+
+- The website and the page on this Mac keep **separate** applications and notes (each browser has its own). To move them, press **Back up my data** on one and **Restore from backup** on the other.
+- The website is public: anyone with the link can see the list of companies and positions. Your applications, notes and details are not on it; they stay in your browser.
+- finn.no / LinkedIn alert emails and macOS notifications only work on this Mac, not on the website. The Save job button works on both.
+- Changes to the settings (`Oppsett.command`, `config.json`) reach the website only after they are committed and pushed to GitHub.
+- GitHub pauses the 2-hourly runs if the repository has had no changes for 60 days and sends an email first. To start them again: the repository's **Actions** tab, **Update website**, **Enable workflow**. **Run workflow** there updates the site right away.
+
 ### Automatic updates
 
 Double-click **Slå på automatisk oppdatering.command** once. After that the program runs by itself every 2 hours while you are logged in to this Mac (and at login), without opening anything. When it finds a new position you can apply to, macOS shows a notification with the title and employer. A page left open in the browser reloads itself every 15 minutes.
