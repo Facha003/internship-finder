@@ -1,0 +1,63 @@
+# Runs the finder on GitHub's servers and publishes the page as a website (GitHub Pages).
+# Every 2 hours, on every push to main, and on demand from the Actions tab ("Run workflow").
+# If a run fails, the website keeps showing the last page that worked.
+name: Update website
+
+on:
+  schedule:
+    - cron: "17 5-21/2 * * *"   # every 2 hours during the day (UTC), off the full hour to avoid the rush
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  TZ: Europe/Oslo   # "updated ..." on the page is shown in Norwegian time
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      # cache/ holds crawled pages, the NAV feed position and first-seen dates (the "New" badges).
+      # A new key on every run makes GitHub save it each time; restore-keys picks up the latest one.
+      - uses: actions/cache@v4
+        with:
+          path: cache
+          key: finder-cache-${{ github.run_id }}
+          restore-keys: finder-cache-
+
+      - name: Tests
+        run: python3 -m unittest discover -s tests
+
+      - name: Fetch everything and build the page
+        run: python3 finder.py --no-open
+
+      - name: Put the page where the website expects it
+        run: |
+          mkdir site
+          cp results.html site/index.html
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

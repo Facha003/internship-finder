@@ -651,13 +651,16 @@ function notices() {
     if (btnText) { const b = el("button", { text: btnText }); b.onclick = fn; n.append(b); }
     box.append(n);
   };
+  // On the website (GitHub Pages) there are no .command files to double-click.
+  const HOSTED = location.protocol !== "file:";
   const ageDays = (Date.now() / 1000 - (DATA.generated_ts || 0)) / 86400;
   if (DATA.generated_ts && ageDays > 2) {
-    note("This page was last updated " + Math.floor(ageDays) + " days ago, so new positions are missing. Double-click «Finn bedrifter.command» "
-       + "to update, and «Sjekk at alt virker.command» if automatic updates should have been on.");
+    note("This page was last updated " + Math.floor(ageDays) + " days ago, so new positions are missing. " + (HOSTED
+       ? "The website updates itself every 2 hours; if it has stopped, open the repository's Actions tab on GitHub and press Run workflow."
+       : "Double-click «Finn bedrifter.command» to update, and «Sjekk at alt virker.command» if automatic updates should have been on."));
   }
   const failing = (DATA.status || []).filter((s) => s.state === "failed" && s.fails >= 3);
-  if (failing.length) note("Not working right now: " + failing.map((s) => s.label).join(", ") + ". Double-click «Sjekk at alt virker.command» for what to do.");
+  if (failing.length) note("Not working right now: " + failing.map((s) => s.label).join(", ") + ". " + (HOSTED ? "It is retried on every update." : "Double-click «Sjekk at alt virker.command» for what to do."));
   const hasData = Object.values(itrack).some((s) => s.status) || Object.values(track).some((s) => s.status);
   const last = lastBackup();
   if (hasData && Date.now() - last > 14 * DAY) {
@@ -675,7 +678,7 @@ function sources() {
   (DATA.status || []).forEach((s, i) => {
     if (i) box.append(" · ");
     if (s.state === "ok") box.append(el("span", { class: "src-ok", text: "✓ " }), s.label + " (" + s.count + ")");
-    else if (s.state === "off") box.append(s.label + ": not set up (double-click «Koble til e-post.command»)");
+    else if (s.state === "off") box.append(s.label + (HOSTED ? ": not available on the website" : ": not set up (double-click «Koble til e-post.command»)"));
     else box.append(el("span", { class: "src-bad", text: "✗ " + s.label + " failing" }), s.last_ok ? ", last worked " + s.last_ok : "");
   });
   if (!(DATA.status || []).length) box.append("not checked in this run");
