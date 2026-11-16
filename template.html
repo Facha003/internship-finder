@@ -1,0 +1,808 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project &amp; internship finder</title>
+<style>
+  :root {
+    --bg: #f6f6f3; --panel: #ffffff; --text: #1b1c1e; --muted: #646a72; --line: #e1e1dc; --chip: #efefea;
+    --accent: #1f5fbf; --good: #1d7a3e; --good-bg: #e3f4e8; --info: #1f5fbf; --info-bg: #e4eefb;
+    --plain: #6b6f76; --plain-bg: #ececea; --idea-bg: #fbf6e6; --idea-line: #e8d9a4; --warn-bg: #fff1dc; --warn: #8a5300;
+    --urgent: #b3261e; --urgent-bg: #fde7e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #161719; --panel: #1f2124; --text: #e8e8e5; --muted: #9aa0a8; --line: #33363b; --chip: #2a2d32;
+      --accent: #82b2ff; --good: #7fd69a; --good-bg: #1c3626; --info: #8fbaff; --info-bg: #1c2c44;
+      --plain: #a3a7ae; --plain-bg: #2a2c30; --idea-bg: #2c2817; --idea-line: #574b1f; --warn-bg: #3a2c12; --warn: #f0c070;
+      --urgent: #ff9a92; --urgent-bg: #45201d;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 20px; }
+  header { padding: 22px 0 8px; display: flex; gap: 12px 24px; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; }
+  h1 { margin: 0 0 2px; font-size: 22px; }
+  .sub { color: var(--muted); font-size: 14px; }
+  input, select, button { font: inherit; color: inherit; background: var(--panel); border: 1px solid var(--line); border-radius: 7px; padding: 6px 10px; }
+  button, a.btn { cursor: pointer; }
+  button:hover, a.btn:hover { border-color: var(--accent); }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .modes { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--panel); }
+  .modes button { border: 0; border-radius: 0; padding: 9px 18px; font-weight: 600; background: transparent; }
+  .modes button[aria-pressed=true] { background: var(--accent); color: #fff; }
+  @media (prefers-color-scheme: dark) { .modes button[aria-pressed=true] { color: #10141c; } }
+
+  details.me { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; margin: 10px 0; }
+  details.me.todo { background: var(--warn-bg); border-color: transparent; }
+  details.me summary { padding: 10px 14px; cursor: pointer; font-weight: 600; }
+  details.me.todo summary { color: var(--warn); }
+  .me-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px 14px; padding: 4px 14px 14px; }
+  .me-grid label { display: block; font-size: 12.5px; color: var(--muted); }
+  .me-grid input { width: 100%; margin-top: 3px; }
+
+  .bar { position: sticky; top: 0; z-index: 3; background: var(--bg); padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+  .tab { border-radius: 20px; padding: 6px 14px; }
+  .tab[aria-selected=true] { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .tab .n { opacity: .65; margin-left: 5px; font-variant-numeric: tabular-nums; }
+  .filters { display: flex; gap: 8px 12px; flex-wrap: wrap; align-items: center; }
+  .filters input[type=search] { flex: 1 1 220px; min-width: 0; }
+  label.chk { display: inline-flex; gap: 6px; align-items: center; white-space: nowrap; color: var(--muted); font-size: 14px; }
+  label.chk input { padding: 0; }
+  [data-for].off { display: none; }
+
+  main { padding: 16px 0 70px; }
+  .hint { color: var(--muted); font-size: 13px; }
+  #tabhint { margin-bottom: 14px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; margin-bottom: 14px; }
+  .card.dim { opacity: .55; }
+  .top { display: flex; gap: 10px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
+  .name { font-size: 18px; font-weight: 650; margin: 4px 0 0; }
+  .who { color: var(--muted); font-size: 14px; margin-top: 2px; }
+  .who b { color: var(--text); font-weight: 600; }
+  .badge { display: inline-block; font-size: 12px; font-weight: 600; padding: 2px 9px; border-radius: 12px; margin: 0 6px 2px 0; }
+  .badge.good { color: var(--good); background: var(--good-bg); }
+  .badge.info { color: var(--info); background: var(--info-bg); }
+  .badge.plain { color: var(--plain); background: var(--plain-bg); }
+  .badge.warn { color: var(--warn); background: var(--warn-bg); }
+  .badge.urgent { color: var(--urgent); background: var(--urgent-bg); }
+  .does { margin: 8px 0 10px; }
+  .row { display: flex; gap: 10px; margin: 6px 0; }
+  .row > .k { flex: 0 0 118px; color: var(--muted); font-size: 12.5px; padding-top: 2px; }
+  .row > .v { flex: 1; min-width: 0; }
+  .chip { display: inline-block; background: var(--chip); border-radius: 5px; padding: 1px 7px; margin: 0 4px 4px 0; font-size: 13px; }
+  .chip.sector { background: transparent; border: 1px solid var(--line); }
+  blockquote { margin: 0; padding-left: 10px; border-left: 3px solid var(--line); font-style: italic; }
+  .src { font-size: 12.5px; font-style: normal; white-space: nowrap; }
+  .idea { background: var(--idea-bg); border: 1px solid var(--idea-line); border-radius: 8px; padding: 8px 12px; }
+  .idea small { color: var(--muted); font-size: 12.5px; }
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
+  a.btn { border: 1px solid var(--line); border-radius: 7px; padding: 6px 12px; color: var(--text); background: var(--panel); }
+  a.btn.primary, button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  @media (prefers-color-scheme: dark) { a.btn.primary, button.primary { color: #10141c; } }
+  a.btn:hover { text-decoration: none; }
+  .actions input { flex: 1 1 180px; min-width: 0; }
+  .meta { color: var(--muted); font-size: 12.5px; margin-top: 8px; }
+  .empty { padding: 50px 0; text-align: center; color: var(--muted); }
+  #more { display: block; margin: 0 auto; }
+  #toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); background: var(--text); color: var(--bg); padding: 8px 16px; border-radius: 8px; opacity: 0; transition: opacity .2s; pointer-events: none; }
+  #toast.on { opacity: 1; }
+  .notice { background: var(--warn-bg); color: var(--warn); border-radius: 10px; padding: 9px 14px; margin: 10px 0; font-size: 14px; }
+  .notice button { margin-left: 8px; }
+  details.addbox { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; margin-bottom: 14px; }
+  details.addbox summary { padding: 11px 16px; cursor: pointer; font-weight: 600; }
+  .addgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px 14px; padding: 4px 16px 6px; }
+  .addgrid label { display: block; font-size: 12.5px; color: var(--muted); }
+  .addgrid input { width: 100%; margin-top: 3px; }
+  .addfoot { padding: 6px 16px 14px; display: flex; gap: 10px 14px; flex-wrap: wrap; align-items: center; }
+  a.bookmark { border: 1px dashed var(--accent); border-radius: 7px; padding: 5px 12px; font-weight: 600; cursor: grab; }
+  footer { border-top: 1px solid var(--line); margin-top: 30px; padding: 14px 0 40px; color: var(--muted); font-size: 12.5px; }
+  footer .src-ok { color: var(--good); } footer .src-bad { color: var(--urgent); font-weight: 600; }
+  footer .tools { margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  @media (max-width: 560px) { .row { display: block; } .row > .k { margin-bottom: 2px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Project &amp; internship finder</h1>
+      <div class="sub" id="summary"></div>
+    </div>
+    <div class="modes" role="group" aria-label="What are you looking for?">
+      <button data-mode="bachelor">Bachelor project</button>
+      <button data-mode="intern">Internships</button>
+    </div>
+  </header>
+
+  <div id="notices"></div>
+
+  <details class="me" id="me">
+    <summary id="me-title">Our details</summary>
+    <div class="me-grid">
+      <label data-for="intern">My name (internship emails)<input id="g-mitt_navn" placeholder="Ola Nordmann"></label>
+      <label data-for="bachelor">Group names (comma-separated)<input id="g-navn" placeholder="Ola Nordmann, Kari Nordmann, …"></label>
+      <label>Study programme<input id="g-studieprogram" placeholder="dataingeniør"></label>
+      <label data-for="bachelor">Semester<input id="g-semester" placeholder="våren 2027"></label>
+      <label>Contact email<input id="g-kontakt_epost" type="email" placeholder="you@oslomet.no"></label>
+      <label>Phone<input id="g-telefon" placeholder="optional"></label>
+    </div>
+  </details>
+</div>
+
+<div class="bar"><div class="wrap">
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <div class="filters">
+    <input type="search" id="q" placeholder="Search…" aria-label="Search">
+    <select id="f-tier" data-for="bachelor" aria-label="Availability"><option value="">Any availability</option></select>
+    <select id="f-sector" data-for="bachelor" aria-label="Sector"><option value="">Any sector</option></select>
+    <select id="f-type" data-for="intern" aria-label="Type"><option value="">Any type</option></select>
+    <label class="chk" data-for="intern"><input type="checkbox" id="f-new"> New only</label>
+    <label class="chk" data-for="intern"><input type="checkbox" id="f-closed"> Show closed</label>
+    <label class="chk" data-for="intern"><input type="checkbox" id="f-nofit"> <span id="nofit-label">Show ones I probably can't get</span></label>
+    <button id="export" title="Download your statuses and notes as a spreadsheet">Export tracking</button>
+  </div>
+</div></div>
+
+<div class="wrap"><main>
+  <div class="hint" id="tabhint"></div>
+  <details class="addbox" id="addbox" hidden>
+    <summary>Add a position yourself (from finn.no, LinkedIn or anywhere)</summary>
+    <div class="addgrid">
+      <label>Paste a link, or what the Save job button copied<input id="a-paste" placeholder="Paste here"></label>
+      <label>Title<input id="a-title" placeholder="Summer intern, software"></label>
+      <label>Employer<input id="a-employer"></label>
+      <label>Link<input id="a-url" type="url" placeholder="https://…"></label>
+      <label>Deadline (optional)<input id="a-deadline" type="date"></label>
+    </div>
+    <div class="addfoot">
+      <button class="primary" id="a-save">Add to my applications</button>
+      <span class="hint">One click from any job ad: drag this to your bookmarks bar
+        <a class="bookmark" id="bookmarklet" href="#">Save job</a>
+        then click it while looking at an ad and paste the result in the first box.</span>
+    </div>
+  </details>
+  <div id="cards"></div>
+  <button id="more" hidden>Show more</button>
+  <div class="empty" id="empty" hidden></div>
+</main>
+<footer>
+  <div id="sources"></div>
+  <div class="tools">
+    <button id="backup">Back up my data</button>
+    <button id="restore">Restore from backup</button>
+    <input type="file" id="restore-file" accept="application/json,.json" hidden>
+    <button id="ics-all" data-for="intern">All my deadlines to calendar</button>
+    <span id="backup-info"></span>
+  </div>
+</footer>
+</div>
+<div id="toast"></div>
+
+<script>
+const DATA = /*__DATA__*/null;
+const STATUSES = [["", "Not contacted"], ["sent", "Email sent"], ["replied", "Replied"], ["meeting", "Meeting booked"], ["no", "No / dropped"]];
+const ISTATUSES = [["", "Not saved"], ["saved", "Saved"], ["applied", "Applied"], ["interview", "Interview"], ["offer", "Offer"], ["rejected", "Rejected / dropped"]];
+const PAGE = 60;
+const KEY = "bachelor-finder-v1", GKEY = "bachelor-finder-group", IKEY = "bachelor-finder-intern-v1", MKEY = "bachelor-finder-mode";
+const BKEY = "bachelor-finder-backup-at";
+const BACHELOR_ON = DATA.bachelor !== false;   // false once the bachelor part has been retired
+
+function load(key) { try { return JSON.parse(localStorage.getItem(key) || "{}") || {}; } catch (e) { return {}; } }
+function store(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {} }
+const track = load(KEY);     // bachelor project tracking
+const itrack = load(IKEY);   // internship tracking: personal, separate from the project
+const st = (id) => track[id] || (track[id] = { status: "", note: "" });
+const ist = (id) => itrack[id] || (itrack[id] = { status: "", note: "" });
+
+const $ = (id) => document.getElementById(id);
+function el(tag, attrs, ...kids) {
+  const n = document.createElement(tag);
+  for (const k in (attrs || {})) {
+    if (k === "class") n.className = attrs[k]; else if (k === "text") n.textContent = attrs[k]; else n.setAttribute(k, attrs[k]);
+  }
+  for (const c of kids) if (c) n.append(c);
+  return n;
+}
+const safeUrl = (u) => (/^https?:\/\//i.test(u || "") ? u : "");
+function link(u, text, cls) {
+  u = safeUrl(u);
+  return u ? el("a", { href: u, target: "_blank", rel: "noopener noreferrer", text, class: cls || "" }) : null;
+}
+function toast(msg) { const t = $("toast"); t.textContent = msg; t.classList.add("on"); setTimeout(() => t.classList.remove("on"), 1700); }
+const rowsById = {}; DATA.rows.forEach((r) => { rowsById[r.id] = r; });
+const listingsById = {}; DATA.listings.forEach((l) => { listingsById[l.id] = l; });
+
+/* ---- state ---- */
+const TABS = {
+  bachelor: [["best", "Best bets"], ["contacted", "Contacted"], ["all", "All"]],
+  intern: [["open", "Open positions"], ["programmes", "Companies with programmes"], ["mine", "My applications"]],
+};
+let mode = "bachelor";
+try { if (localStorage.getItem(MKEY) === "intern") mode = "intern"; } catch (e) {}
+if (!BACHELOR_ON) {
+  mode = "intern";
+  document.querySelector(".modes").hidden = true;
+  document.querySelector(".modes").style.display = "none";
+  document.querySelector("h1").textContent = "Internship finder";
+  document.title = "Internship finder";
+}
+let tab = TABS[mode][0][0], shown = PAGE;
+
+/* ---- dates ---- */
+const DAY = 86400000;
+function today0() { const d = new Date(); d.setHours(0, 0, 0, 0); return d; }
+function daysUntil(iso) { const p = iso.split("-").map(Number); return Math.round((new Date(p[0], p[1] - 1, p[2]) - today0()) / DAY); }
+function niceDate(iso) { const p = iso.split("-").map(Number); return new Date(p[0], p[1] - 1, p[2]).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }); }
+function deadlineInfo(d) {
+  if (!d) return { text: "No deadline given", cls: "plain", closed: false, sort: 9e6 };
+  if (!d.date) return { text: "Rolling: apply soon", cls: "warn", closed: false, sort: 8e6 };
+  const n = daysUntil(d.date), expires = d.kind === "expires", guess = d.kind === "guess";
+  const tail = " · " + niceDate(d.date) + (guess ? " (from page text, check)" : "");
+  if (n < 0) return { text: (expires ? "Ad expired" : guess ? "Deadline passed" : "Closed") + tail, cls: "plain", closed: true, sort: 9e6 + 1 };
+  const verb = expires ? "Ad expires" : "Closes";
+  const when = n === 0 ? " today" : n === 1 ? " tomorrow" : " in " + n + " days";
+  return { text: verb + when + tail, cls: n <= 7 ? "urgent" : n <= 21 ? "warn" : "good", closed: false, sort: n };
+}
+const isNew = (l) => l.new && daysUntil(l.first_seen) >= -7;
+// The summer people apply for now: this year's until June, next year's after. Computed when the
+// page is viewed, so nothing here needs changing from one year to the next.
+function nextSummer() { const d = new Date(); return d.getMonth() <= 5 ? d.getFullYear() : d.getFullYear() + 1; }
+
+/* ---- calendar files (.ics) and downloads ---- */
+function download(text, name, type) {
+  const a = el("a", { href: URL.createObjectURL(new Blob([text], { type })), download: name });
+  document.body.append(a); a.click(); a.remove();
+}
+function icsEvent(id, title, employer, url, iso) {
+  const esc = (t) => String(t || "").replace(/\\/g, "\\\\").replace(/([,;])/g, "\\$1").replace(/\r?\n/g, "\\n");
+  const ymd = (dt) => dt.getFullYear() + String(dt.getMonth() + 1).padStart(2, "0") + String(dt.getDate()).padStart(2, "0");
+  const p = iso.split("-").map(Number);
+  const start = new Date(p[0], p[1] - 1, p[2]), end = new Date(p[0], p[1] - 1, p[2] + 1);
+  const stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d+/, "");
+  const what = "Deadline: " + title + (employer ? " (" + employer + ")" : "");
+  return ["BEGIN:VEVENT", "UID:" + String(id).replace(/[^\w.-]/g, "-") + "@internship-finder", "DTSTAMP:" + stamp,
+          "DTSTART;VALUE=DATE:" + ymd(start), "DTEND;VALUE=DATE:" + ymd(end), "SUMMARY:" + esc(what),
+          "DESCRIPTION:" + esc(url), safeUrl(url) ? "URL:" + url : "", "BEGIN:VALARM", "TRIGGER:-P2D", "ACTION:DISPLAY",
+          "DESCRIPTION:" + esc(what), "END:VALARM", "END:VEVENT"].filter(Boolean).join("\r\n");
+}
+function downloadIcs(events, name) {
+  if (!events.length) { toast("No deadlines with a date to add"); return; }
+  download(["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//internship-finder//EN", ...events, "END:VCALENDAR"].join("\r\n") + "\r\n",
+           name, "text/calendar");
+}
+function calendarButton(id, title, employer, url, deadline) {
+  if (!deadline || !deadline.date || daysUntil(deadline.date) < 0) return null;
+  const b = el("button", { text: "Add to calendar" });
+  b.onclick = () => downloadIcs([icsEvent(id, title, employer, url, deadline.date)], "deadline.ics");
+  return b;
+}
+
+
+/* ---- details (saved in this browser) ---- */
+const GFIELDS = ["mitt_navn", "navn", "studieprogram", "semester", "kontakt_epost", "telefon"];
+const group = (() => {
+  const saved = load(GKEY), g = {};
+  GFIELDS.forEach((f) => {
+    let d = DATA.group[f];
+    if (Array.isArray(d)) d = d.join(", ");
+    d = /\[/.test(d || "") ? "" : (d || "");          // [placeholders] from config count as empty
+    g[f] = typeof saved[f] === "string" ? saved[f] : d;
+  });
+  return g;
+})();
+function groupReady() {
+  const who = mode === "intern" ? group.mitt_navn : group.navn;
+  return who.trim() && group.studieprogram.trim() && group.kontakt_epost.trim();
+}
+function paintGroup() {
+  const ready = groupReady();
+  $("me").classList.toggle("todo", !ready);
+  $("me-title").textContent = ready ? (mode === "intern" ? "My details (used in the emails)" : "Our details (used in the emails)")
+    : "Start here: add your name and contact details so the emails are filled in";
+}
+GFIELDS.forEach((f) => {
+  const inp = $("g-" + f);
+  inp.value = group[f];
+  inp.addEventListener("input", () => { group[f] = inp.value; store(GKEY, group); paintGroup(); });
+  inp.addEventListener("change", render);
+});
+
+/* ---- email ---- */
+function reason(r) {
+  const ai = r.matches.ai.length, cloud = r.matches.cloud.length;
+  if (ai && cloud) return "dere jobber med begge deler";
+  if (ai) return "dere jobber med kunstig intelligens";
+  if (cloud) return "dere jobber med skyteknologi";
+  return "vi tror det kan være nyttig i det dere jobber med";
+}
+function fill(s, r) {
+  const vals = {
+    firma: r.name, grunn: reason(r),
+    ide: r.idea.no || "et internt verktøy eller en prototype dere har bruk for",
+    semester: group.semester.trim() || "våren 2027",
+    studieprogram: group.studieprogram.trim() || "[studieprogram]",
+    navn: group.navn.trim() || "[navn]",
+    mitt_navn: group.mitt_navn.trim() || "[ditt navn]",
+    sommer: "sommeren " + nextSummer(),
+    studiested: DATA.profile.studiested || "OsloMet",
+    nivaa: DATA.profile.nivaa || "bachelor",
+    ferdig: String(DATA.profile.ferdig || ""),
+    kontakt_epost: group.kontakt_epost.trim() || "[e-post]",
+    telefon: group.telefon.trim(),
+  };
+  return s.replace(/\{(\w+)\}/g, (m, k) => (k in vals ? vals[k] : m)).replace(/\n{3,}/g, "\n\n").trimEnd() + "\n";
+}
+const emailFor = (r) => {
+  const t = mode === "intern" ? DATA.intern_template : DATA.template;
+  return { subject: fill(t.subject, r).trim(), body: fill(t.body, r) };
+};
+const mailto = (addr) => "mailto:" + encodeURIComponent(addr).replace("%40", "@");
+function copy(text) {
+  const fallback = () => {
+    const ta = el("textarea"); ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.append(ta); ta.select();
+    let ok = false; try { ok = document.execCommand("copy"); } catch (e) {}
+    ta.remove(); toast(ok ? "Email text copied" : "Could not copy; select it manually");
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(() => toast("Email text copied"), fallback);
+  else fallback();
+}
+
+/* ---- what each tab shows ---- */
+const contacted = (r) => ["sent", "replied", "meeting"].includes(st(r.id).status);
+const tracked = (id) => !!(itrack[id] && itrack[id].status);
+function hay(parts) { return parts.filter(Boolean).join(" ").toLowerCase(); }
+
+function items(which) {
+  which = which || tab;
+  const q = $("q").value.trim().toLowerCase();
+  const match = (text) => !q || text.includes(q);
+  if (mode === "bachelor") {
+    const tier = $("f-tier").value, sector = $("f-sector").value;
+    const inTab = { best: (r) => r.best && !st(r.id).status, contacted, all: () => true }[which];
+    return DATA.rows.filter((r) => inTab(r) && (!tier || r.tier === tier) && (!sector || r.sectors.includes(sector))
+      && match(hay([r.name, r.description, r.industry, r.municipality, r.note, r.idea.en, st(r.id).note, ...r.tech, ...r.sectors])))
+      .map((r) => ({ kind: "company", r }));
+  }
+  const type = $("f-type").value, onlyNew = $("f-new").checked, showClosed = $("f-closed").checked;
+  const fits = (fit) => $("f-nofit").checked || fit.verdict !== "no";
+  if (which === "open") {
+    return DATA.listings.filter((l) => !tracked(l.id) && fits(l.fit) && (!type || l.type === type) && (!onlyNew || isNew(l))
+      && (showClosed || !deadlineInfo(l.deadline).closed)
+      && match(hay([l.title, l.employer, l.location, l.excerpt, DATA.types[l.type]])))
+      .sort((a, b) => deadlineInfo(a.deadline).sort - deadlineInfo(b.deadline).sort || fitRank(a.fit) - fitRank(b.fit))
+      .map((l) => ({ kind: "listing", l }));
+  }
+  if (which === "programmes") {
+    const year = new Date().getFullYear();
+    const rank = (r) => {
+      const d = r.internship.deadline, i = d ? deadlineInfo(d) : null;
+      return (i && !i.closed ? i.sort : 5e6) - (r.internship.season >= year ? 1e5 : 0)
+        - r.internship.keywords.length * 100 - r.openings * 1e4 + fitRank(r.internship.fit) * 50;
+    };
+    return DATA.rows.filter((r) => r.internship && !tracked("co:" + r.id) && fits(r.internship.fit)
+      && match(hay([r.name, r.description, r.municipality, ...r.tech, ...r.sectors, ...r.internship.keywords])))
+      .sort((a, b) => rank(a) - rank(b))
+      .map((r) => ({ kind: "programme", r }));
+  }
+  // mine: everything with a status, including ads that have since disappeared
+  const order = { interview: 0, offer: 1, applied: 2, saved: 3, rejected: 4 };
+  const sid = (x) => (x.kind === "listing" ? x.l.id : x.kind === "programme" ? "co:" + x.r.id : x.id);
+  return Object.keys(itrack).filter((id) => itrack[id].status).map((id) => {
+    if (listingsById[id]) return { kind: "listing", l: listingsById[id] };
+    const r = id.startsWith("co:") ? rowsById[id.slice(3)] : null;
+    if (r && r.internship) return { kind: "programme", r };
+    return { kind: "gone", id, snap: itrack[id].snap || {} };
+  }).filter((x) => match(hay(x.kind === "listing" ? [x.l.title, x.l.employer] : x.kind === "programme" ? [x.r.name] : [x.snap.title, x.snap.employer])))
+    .sort((a, b) => order[itrack[sid(a)].status] - order[itrack[sid(b)].status]);
+}
+
+/* ---- would they take me? (verdict computed from the ad text when the program ran) ---- */
+const fitRank = (fit) => (fit.verdict === "no" ? 3 : fit.verdict === "check" ? 2 : fit.field ? 0 : 1);
+function fitBadge(fit) {
+  if (fit.verdict === "no") return el("span", { class: "badge plain", text: "Probably not for you: " + fit.reason });
+  if (fit.verdict === "check") return el("span", { class: "badge warn", text: "Check: " + fit.reason });
+  if (fit.field) return el("span", { class: "badge good", text: "Asks for your field" });
+  return null;
+}
+const openForMe = (l) => l.fit.verdict !== "no" && !deadlineInfo(l.deadline).closed;
+
+/* ---- card pieces ---- */
+function row(label, value) { return el("div", { class: "row" }, el("div", { class: "k", text: label }), value); }
+function quoteBlock(q) {
+  const bq = el("blockquote", { text: "“" + q.text + "” " });
+  const src = link(q.url, "source");
+  if (src) { src.className = "src"; bq.append(src); }
+  return el("div", { class: "v" }, bq);
+}
+function chipsRow(r) {
+  if (!r.tech.length && !r.sectors.length) return null;
+  const v = el("div", { class: "v" });
+  r.tech.forEach((t) => v.append(el("span", { class: "chip", text: t })));
+  r.sectors.forEach((t) => v.append(el("span", { class: "chip sector", text: t })));
+  return row("Works with", v);
+}
+function add(parent, ...nodes) { nodes.forEach((n) => { if (n) parent.append(n); }); }
+function statusSelect(list, current, label, onchange) {
+  const sel = el("select", { "aria-label": label });
+  list.forEach(([v, lab]) => { const o = el("option", { value: v, text: lab }); if (v === current) o.selected = true; sel.append(o); });
+  sel.onchange = () => onchange(sel.value);
+  return sel;
+}
+function notesInput(obj, key, label) {
+  const note = el("input", { type: "text", placeholder: "Notes (who, when, what they said)", "aria-label": label });
+  note.value = obj.note || "";
+  note.oninput = () => { obj.note = note.value; store(key, key === KEY ? track : itrack); };
+  return note;
+}
+function internStatus(id, snap, label) {
+  const s = ist(id);
+  return statusSelect(ISTATUSES, s.status, label, (v) => {
+    s.status = v; s.snap = snap; store(IKEY, itrack);
+    if (tab !== "mine" && v) toast("Moved to My applications");
+    render();
+  });
+}
+function emailButtons(a, r) {
+  const m = emailFor(r);
+  if (r.email) a.append(el("a", { class: "btn", text: "Email " + r.email,
+    href: mailto(r.email) + "?subject=" + encodeURIComponent(m.subject) + "&body=" + encodeURIComponent(m.body) }));
+  const cp = el("button", { text: "Copy email text" });
+  cp.onclick = () => copy("Emne: " + m.subject + "\n\n" + m.body);
+  a.append(cp);
+}
+function makePrimary(a) { const first = a.querySelector("a.btn, button"); if (first) first.classList.add("primary"); }
+
+/* ---- bachelor: company card ---- */
+function companyCard(r) {
+  const s = st(r.id);
+  const c = el("article", { class: "card" + (s.status === "no" ? " dim" : "") });
+  const head = el("div");
+  head.append(el("span", { class: "badge " + ({ thesis: "good", students: "info" }[r.tier] || "plain"), text: DATA.tiers[r.tier] }));
+  if (r.past_client) head.append(el("span", { class: "badge good", text: "Past OsloMet client" }));
+  if (r.source === "seed") head.append(el("span", { class: "badge plain", text: "Hand-picked" }));
+  head.append(el("h2", { class: "name", text: r.name }));
+  c.append(el("div", { class: "top" }, head, statusSelect(STATUSES, s.status, "Status for " + r.name, (v) => {
+    s.status = v; store(KEY, track);
+    if (tab === "best" && v) toast(v === "no" ? "Removed from Best bets" : "Moved to Contacted");
+    render();
+  })));
+  c.append(el("p", { class: "does", text: r.description || (r.tier === "unknown" ? "Website could not be read automatically. " : "No description found on their site. ") + (r.industry || "") }));
+  add(c, chipsRow(r));
+  if (r.quote && r.quote.text) c.append(row(r.quote.prose ? "In their own words" : "Found on their site", quoteBlock(r.quote)));
+  if (r.idea.en) {
+    c.append(row("What they might need", el("div", { class: "v idea" },
+      el("div", { text: r.idea.en }),
+      el("small", { text: r.idea.source === "tailored" ? "Our suggestion for this organisation, not something they have asked for. It is included in the email."
+                                                         : "Generic suggestion based on their sector and technology. It is included in the email." }))));
+  }
+  const a = el("div", { class: "actions" });
+  emailButtons(a, r);
+  add(a, link(r.career_url, "Careers page", "btn"), link(r.website, "Website", "btn"));
+  makePrimary(a);
+  a.append(notesInput(s, KEY, "Notes for " + r.name));
+  c.append(a);
+  const meta = [r.employees ? r.employees + " employees" : "", r.municipality,
+                r.email ? "" : "no email found, use the contact form on their site", r.note].filter(Boolean).join(" · ");
+  const mdiv = el("div", { class: "meta", text: meta });
+  const reg = link(r.brreg, "registry entry");
+  if (reg) { if (meta) mdiv.append(" · "); mdiv.append(reg); }
+  if (meta || reg) c.append(mdiv);
+  return c;
+}
+
+/* ---- internships: a real opening ---- */
+function listingCard(l) {
+  const s = ist(l.id), info = deadlineInfo(l.deadline), co = rowsById[l.company_id];
+  const c = el("article", { class: "card" + (info.closed || s.status === "rejected" || l.fit.verdict === "no" ? " dim" : "") });
+  const head = el("div");
+  head.append(el("span", { class: "badge " + info.cls, text: info.text }));
+  head.append(el("span", { class: "badge info", text: DATA.types[l.type] || l.type }));
+  if (isNew(l)) head.append(el("span", { class: "badge good", text: "New" }));
+  add(head, fitBadge(l.fit));
+  head.append(el("h2", { class: "name", text: l.title }));
+  const who = el("div", { class: "who" }, el("b", { text: l.employer }));
+  who.append([l.location, l.extent].filter(Boolean).map((x) => " · " + x).join(""));
+  head.append(who);
+  c.append(el("div", { class: "top" }, head,
+    internStatus(l.id, { title: l.title, employer: l.employer, url: l.url, deadline: l.deadline }, "Status for " + l.title)));
+  const about = (co && co.description) || (l.excerpt ? l.excerpt + (l.excerpt.length >= 255 ? " …" : "") : "");
+  if (about) c.append(el("p", { class: "does", text: about }));
+  if (co) add(c, chipsRow(co));
+  const home = (co && co.website) || (/^https?:/.test(l.homepage) ? l.homepage : l.homepage ? "https://" + l.homepage : "");
+  const a = el("div", { class: "actions" });
+  add(a, link(l.url, "Apply / read the ad", "btn primary"),
+         l.ad_url !== l.url ? link(l.ad_url, "Ad on " + l.source, "btn") : null,
+         link(home, "Company website", "btn"), calendarButton(l.id, l.title, l.employer, l.url, l.deadline));
+  a.append(notesInput(s, IKEY, "Notes for " + l.title));
+  c.append(a);
+  c.append(el("div", { class: "meta", text: ["Found on " + l.source, l.published ? "published " + niceDate(l.published) : "",
+    "first seen " + niceDate(l.first_seen)].filter(Boolean).join(" · ") }));
+  return c;
+}
+
+/* ---- internships: a company that says it takes interns ---- */
+function programmeCard(r) {
+  const id = "co:" + r.id, s = ist(id), it = r.internship;
+  const c = el("article", { class: "card" + (s.status === "rejected" ? " dim" : "") });
+  const head = el("div");
+  if (it.deadline) { const i = deadlineInfo(it.deadline); head.append(el("span", { class: "badge " + i.cls, text: i.text })); }
+  if (it.season >= new Date().getFullYear()) head.append(el("span", { class: "badge good", text: "Mentions " + it.season }));
+  if (r.openings) head.append(el("span", { class: "badge info", text: r.openings + (r.openings === 1 ? " open position listed" : " open positions listed") }));
+  add(head, fitBadge(it.fit));
+  head.append(el("h2", { class: "name", text: r.name }));
+  const applyUrl = (it.quote && it.quote.url) || r.career_url;
+  c.append(el("div", { class: "top" }, head,
+    internStatus(id, { title: "Open application", employer: r.name, url: applyUrl || r.website, deadline: it.deadline }, "Status for " + r.name)));
+  if (r.description) c.append(el("p", { class: "does", text: r.description }));
+  add(c, chipsRow(r));
+  const v = it.quote && it.quote.text ? quoteBlock(it.quote) : el("div", { class: "v" });
+  v.append(el("div", { class: "hint", text: "Mentions: " + it.keywords.join(", ") }));
+  c.append(row("About internships", v));
+  const a = el("div", { class: "actions" });
+  add(a, link(applyUrl, "Where to apply", "btn"), link(r.job_board, "Job board", "btn"));
+  emailButtons(a, r);
+  add(a, link(r.website, "Website", "btn"));
+  makePrimary(a);
+  a.append(notesInput(s, IKEY, "Notes for " + r.name));
+  c.append(a);
+  const meta = [r.employees ? r.employees + " employees" : "", r.municipality].filter(Boolean).join(" · ");
+  if (meta) c.append(el("div", { class: "meta", text: meta }));
+  return c;
+}
+
+/* ---- internships: tracked ad that is no longer listed ---- */
+function goneCard(id, snap) {
+  const s = ist(id);
+  const c = el("article", { class: "card" });
+  const head = el("div");
+  if (snap.deadline) { const i = deadlineInfo(snap.deadline); head.append(el("span", { class: "badge " + i.cls, text: i.text })); }
+  head.append(el("span", { class: "badge plain", text: snap.manual ? "Added by you" : "No longer listed" }));
+  head.append(el("h2", { class: "name", text: snap.title || "Saved position" }));
+  head.append(el("div", { class: "who" }, el("b", { text: snap.employer || "" })));
+  c.append(el("div", { class: "top" }, head, internStatus(id, snap, "Status")));
+  const a = el("div", { class: "actions" });
+  add(a, link(snap.url, snap.manual ? "Open the ad" : "Original link", "btn primary"),
+         calendarButton(id, snap.title, snap.employer, snap.url, snap.deadline));
+  a.append(notesInput(s, IKEY, "Notes"));
+  if (snap.manual) {
+    const rm = el("button", { text: "Remove" });
+    rm.onclick = () => { delete itrack[id]; store(IKEY, itrack); render(); };
+    a.append(rm);
+  }
+  c.append(a);
+  return c;
+}
+
+/* ---- render ---- */
+const HINTS = {
+  best: "Found your project? Double-click «Ferdig med bachelorprosjekt.command» in the folder to switch this tool to internships only. Your notes are kept.",
+  open: "Real job ads for students in the Oslo area that a bachelor student in IT can apply to, soonest deadline first. Sources: arbeidsplassen.no (NAV), company job boards and company websites. Not every employer publishes there, so also check: ",
+  programmes: "Companies whose own site says they take interns, summer students or trainees, even if no ad is out right now. Good for an open application.",
+  mine: "Everything you have saved or applied to. Stored in this browser only, so use «Back up my data» at the bottom now and then.",
+};
+const SEARCHES = [["finn.no", "https://www.finn.no/job/search?q=summer+internship+IT"],
+                  ["LinkedIn", "https://www.linkedin.com/jobs/search/?keywords=summer%20internship%20software&location=Oslo"],
+                  ["arbeidsplassen.no", "https://arbeidsplassen.nav.no/stillinger?q=sommerjobb+utvikler"]];
+function render() {
+  document.querySelectorAll("[data-for]").forEach((n) => n.classList.toggle("off", n.dataset.for !== mode));
+  document.querySelectorAll(".modes button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.mode === mode)));
+  paintGroup();
+
+  const tabs = $("tabs"); tabs.textContent = "";
+  TABS[mode].forEach(([id, label]) => {
+    const b = el("button", { class: "tab", role: "tab", "aria-selected": String(id === tab), text: label },
+                 el("span", { class: "n", text: String(items(id).length) }));
+    b.onclick = () => { tab = id; shown = PAGE; render(); window.scrollTo(0, 0); };
+    tabs.append(b);
+  });
+
+  const hiddenN = tab === "programmes" ? DATA.rows.filter((r) => r.internship && r.internship.fit.verdict === "no").length
+                                       : DATA.listings.filter((l) => l.fit.verdict === "no").length;
+  $("nofit-label").textContent = "Show ones I probably can't get (" + hiddenN + ")";
+  try { history.replaceState(null, "", "#" + mode + ":" + tab); } catch (e) {}
+
+  const hint = $("tabhint"); hint.textContent = HINTS[tab] || "";
+  if (tab === "open") SEARCHES.forEach(([t, u], i) => { if (i) hint.append(" · "); hint.append(link(u, t)); });
+  hint.hidden = !hint.textContent;
+
+  $("addbox").hidden = tab !== "mine";
+  notices();
+
+  const list = items(), box = $("cards");
+  box.textContent = "";
+  const frag = document.createDocumentFragment();
+  list.slice(0, shown).forEach((x) => frag.append(
+    x.kind === "company" ? companyCard(x.r) : x.kind === "listing" ? listingCard(x.l) : x.kind === "programme" ? programmeCard(x.r) : goneCard(x.id, x.snap)));
+  box.append(frag);
+  $("more").hidden = list.length <= shown;
+  $("more").textContent = "Show more (" + (list.length - shown) + " left)";
+  const empty = $("empty");
+  empty.hidden = list.length > 0;
+  empty.textContent = { contacted: "Nobody contacted yet. Set a status on a card and it shows up here.",
+                        mine: "Nothing saved yet. Set a status on an opening or a company and it shows up here.",
+                        open: "No open positions match. Clear the filters, or run the program again to fetch new ads." }[tab]
+                      || "Nothing matches. Clear the search or filters.";
+
+  if (mode === "bachelor") {
+    const n = (t) => DATA.rows.filter((r) => r.tier === t).length;
+    $("summary").textContent = n("thesis") + " offer thesis projects · " + n("students") + " take students · " + DATA.rows.length +
+      " organisations checked · updated " + DATA.generated;
+  } else {
+    const open = DATA.listings.filter(openForMe);
+    const soon = open.filter((l) => l.deadline && l.deadline.date && daysUntil(l.deadline.date) <= 7).length;
+    $("summary").textContent = open.length + " open positions · " + soon + " closing within a week · " +
+      open.filter(isNew).length + " new · updated " + DATA.generated;
+  }
+  sources();
+}
+
+/* ---- notices at the top: things that need attention ---- */
+function lastBackup() { try { return Number(localStorage.getItem(BKEY) || 0); } catch (e) { return 0; } }
+function notices() {
+  const box = $("notices"); box.textContent = "";
+  const note = (text, btnText, fn) => {
+    const n = el("div", { class: "notice", text });
+    if (btnText) { const b = el("button", { text: btnText }); b.onclick = fn; n.append(b); }
+    box.append(n);
+  };
+  const ageDays = (Date.now() / 1000 - (DATA.generated_ts || 0)) / 86400;
+  if (DATA.generated_ts && ageDays > 2) {
+    note("This page was last updated " + Math.floor(ageDays) + " days ago, so new positions are missing. Double-click «Finn bedrifter.command» "
+       + "to update, and «Sjekk at alt virker.command» if automatic updates should have been on.");
+  }
+  const failing = (DATA.status || []).filter((s) => s.state === "failed" && s.fails >= 3);
+  if (failing.length) note("Not working right now: " + failing.map((s) => s.label).join(", ") + ". Double-click «Sjekk at alt virker.command» for what to do.");
+  const hasData = Object.values(itrack).some((s) => s.status) || Object.values(track).some((s) => s.status);
+  const last = lastBackup();
+  if (hasData && Date.now() - last > 14 * DAY) {
+    note(last ? "Your last backup is more than two weeks old." : "Your applications and notes exist only in this browser.", "Back up now", backup);
+  }
+  if (!BACHELOR_ON && Object.values(track).some((s) => s.status || s.note)) {
+    note("The bachelor project part is switched off. Your notes about who you contacted are still in this browser.", "Download them",
+         () => { exportBachelor(); toast("Saved to your Downloads folder"); });
+  }
+}
+
+/* ---- source status (footer) ---- */
+function sources() {
+  const box = $("sources"); box.textContent = "Sources: ";
+  (DATA.status || []).forEach((s, i) => {
+    if (i) box.append(" · ");
+    if (s.state === "ok") box.append(el("span", { class: "src-ok", text: "✓ " }), s.label + " (" + s.count + ")");
+    else if (s.state === "off") box.append(s.label + ": not set up (double-click «Koble til e-post.command»)");
+    else box.append(el("span", { class: "src-bad", text: "✗ " + s.label + " failing" }), s.last_ok ? ", last worked " + s.last_ok : "");
+  });
+  if (!(DATA.status || []).length) box.append("not checked in this run");
+  const last = lastBackup();
+  $("backup-info").textContent = last ? "Last backup " + new Date(last).toLocaleDateString("en-GB") : "";
+}
+
+/* ---- backup / restore: everything this browser remembers, in one file ---- */
+function backup() {
+  download(JSON.stringify({ app: "internship-finder", version: 1, saved: new Date().toISOString(), track, itrack, group }, null, 1),
+           "internship-finder-backup-" + new Date().toISOString().slice(0, 10) + ".json", "application/json");
+  try { localStorage.setItem(BKEY, String(Date.now())); } catch (e) {}
+  render();
+}
+function restore(text) {
+  let d = null;
+  try { d = JSON.parse(text); } catch (e) {}
+  if (!d || d.app !== "internship-finder" || typeof d.itrack !== "object") { toast("That is not a backup file from this tool"); return; }
+  if (!confirm("Replace what this browser has saved with the backup from " + String(d.saved).slice(0, 10) + "?")) return;
+  store(KEY, d.track || {}); store(IKEY, d.itrack || {}); store(GKEY, d.group || {});
+  location.reload();
+}
+function csvCell(v) {
+  let s = String(v == null ? "" : v);
+  if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
+  return '"' + s.replace(/"/g, '""') + '"';
+}
+function exportBachelor() {
+  const lines = [["name", "status", "notes", "email", "website"].map(csvCell).join(";")];
+  Object.keys(track).forEach((id) => {
+    const s = track[id], r = rowsById[id] || {};
+    if (s.status || s.note) lines.push([r.name || id, s.status, s.note, r.email, r.website].map(csvCell).join(";"));
+  });
+  download("﻿" + lines.join("\n"), "bachelor-tracking.csv", "text/csv");
+}
+$("backup").onclick = backup;
+$("restore").onclick = () => $("restore-file").click();
+$("restore-file").onchange = (e) => { const f = e.target.files[0]; if (f) f.text().then(restore); };
+$("ics-all").onclick = () => {
+  const ev = [];
+  Object.keys(itrack).forEach((id) => {
+    const s = itrack[id]; if (!s.status || s.status === "rejected") return;
+    const l = listingsById[id], snap = s.snap || {};
+    const d = l ? l.deadline : snap.deadline;
+    if (d && d.date && daysUntil(d.date) >= 0) ev.push(icsEvent(id, l ? l.title : snap.title, l ? l.employer : snap.employer, l ? l.url : snap.url, d.date));
+  });
+  downloadIcs(ev, "internship-deadlines.ics");
+};
+
+/* ---- add a position yourself ---- */
+// The "Save job" bookmark runs in your own browser on the ad you are looking at. It reads the
+// page's standard job markup (schema.org JobPosting) and copies a small piece of text that the
+// paste box below understands. Its source is save_job_bookmarklet.js next to this file.
+const BOOKMARKLET = /*__BOOKMARKLET__*/"";
+$("bookmarklet").setAttribute("href", "javascript:" + encodeURIComponent(BOOKMARKLET));
+$("bookmarklet").onclick = (e) => { e.preventDefault(); toast("Drag it to the bookmarks bar, then click it on a job ad"); };
+function fillFromPaste() {
+  const v = $("a-paste").value.trim();
+  let j = null; try { j = JSON.parse(v); } catch (e) {}
+  if (j && j._job) {
+    $("a-title").value = j.title || ""; $("a-employer").value = j.employer || ""; $("a-url").value = j.url || "";
+    $("a-deadline").value = /^\d{4}-\d\d-\d\d$/.test(j.deadline || "") ? j.deadline : "";
+    $("a-paste").value = ""; toast("Filled in from the ad. Check it, then add.");
+  } else if (/^https?:\/\/\S+$/i.test(v)) { $("a-url").value = v; $("a-paste").value = ""; }
+}
+$("a-paste").addEventListener("input", fillFromPaste);
+function addManual() {
+  const title = $("a-title").value.trim(), date = $("a-deadline").value;
+  if (!title) { toast("Give it a title first"); return; }
+  itrack["manual:" + Date.now()] = { status: "saved", note: "", snap: {
+    manual: true, title, employer: $("a-employer").value.trim(), url: safeUrl($("a-url").value.trim()),
+    deadline: date ? { date, text: "", kind: "deadline" } : null } };
+  store(IKEY, itrack);
+  ["a-title", "a-employer", "a-url", "a-deadline", "a-paste"].forEach((id) => { $(id).value = ""; });
+  $("addbox").open = false; toast("Added"); render();
+}
+$("a-save").onclick = addManual;
+
+Object.entries(DATA.tiers).forEach(([v, lab]) => $("f-tier").append(el("option", { value: v, text: lab })));
+DATA.sectors.forEach((s) => $("f-sector").append(el("option", { value: s, text: s })));
+Object.entries(DATA.types).forEach(([v, lab]) => $("f-type").append(el("option", { value: v, text: lab })));
+document.querySelectorAll(".modes button").forEach((b) => b.onclick = () => {
+  mode = b.dataset.mode; tab = TABS[mode][0][0]; shown = PAGE;
+  try { localStorage.setItem(MKEY, mode); } catch (e) {}
+  render();
+});
+["q", "f-tier", "f-sector", "f-type", "f-new", "f-closed", "f-nofit"].forEach((id) => $(id).addEventListener("input", () => { shown = PAGE; render(); }));
+$("more").onclick = () => { shown += PAGE; render(); };
+$("export").onclick = () => {
+  const cell = (v) => {
+    let s = String(v == null ? "" : v);
+    if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
+    return '"' + s.replace(/"/g, '""') + '"';
+  };
+  let lines;
+  if (mode === "bachelor") {
+    lines = [["name", "status", "notes", "email", "website"].map(cell).join(";")];
+    DATA.rows.forEach((r) => { const s = st(r.id); if (s.status || s.note) lines.push([r.name, s.status, s.note, r.email, r.website].map(cell).join(";")); });
+  } else {
+    lines = [["position", "employer", "status", "notes", "deadline", "link"].map(cell).join(";")];
+    Object.keys(itrack).forEach((id) => {
+      const s = itrack[id]; if (!s.status && !s.note) return;
+      const l = listingsById[id], snap = s.snap || {};
+      lines.push([l ? l.title : snap.title, l ? l.employer : snap.employer, s.status, s.note,
+                  ((l ? l.deadline : snap.deadline) || {}).date || "", l ? l.url : snap.url].map(cell).join(";"));
+    });
+  }
+  const a = el("a", { href: URL.createObjectURL(new Blob(["﻿" + lines.join("\n")], { type: "text/csv" })),
+                      download: mode === "bachelor" ? "bachelor-tracking.csv" : "internship-tracking.csv" });
+  document.body.append(a); a.click(); a.remove();
+};
+
+// #intern or #intern:programmes opens a given view directly
+(() => {
+  const [m, t] = location.hash.slice(1).split(":");
+  if (TABS[m] && (BACHELOR_ON || m === "intern")) { mode = m; tab = TABS[m][0][0]; if (t && TABS[m].some((x) => x[0] === t)) tab = t; }
+})();
+if (!groupReady()) $("me").open = true;
+render();
+
+// The program re-runs in the background; reload now and then to pick up the new file,
+// but never while someone is typing or choosing something.
+setInterval(() => {
+  const a = document.activeElement;
+  if (a && /^(INPUT|SELECT|TEXTAREA)$/.test(a.tagName)) return;
+  location.reload();
+}, 15 * 60 * 1000);
+</script>
+</body>
+</html>

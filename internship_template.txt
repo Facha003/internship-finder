@@ -1,0 +1,14 @@
+Emne: Sommerjobb / internship {sommer} – student fra {studiested}
+
+Hei,
+
+Jeg studerer {studieprogram} ({nivaa}) ved {studiested} og er ferdig med graden i {ferdig}. Jeg tar kontakt for å høre om {firma} har sommerjobb, internship eller deltidsstilling for studenter {sommer}.
+
+Jeg er særlig interessert i kunstig intelligens og skyteknologi, og vil gjerne bidra i et team som jobber med dette hos dere. CV og karakterutskrift ligger vedlagt.
+
+Finnes det en søknadsfrist eller en person jeg bør kontakte?
+
+Vennlig hilsen
+{mitt_navn}
+{kontakt_epost}
+{telefon}

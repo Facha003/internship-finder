@@ -1,0 +1,560 @@
+{
+  "gruppe": {
+    "navn": [
+      "[Navn 1]",
+      "[Navn 2]",
+      "[Navn 3]"
+    ],
+    "studieprogram": "informasjonsteknologi",
+    "semester": "våren 2027",
+    "kontakt_epost": "[e-post]",
+    "telefon": "[telefon]"
+  },
+  "registry": {
+    "kommuner": {
+      "0301": "Oslo",
+      "3201": "Bærum",
+      "3203": "Asker",
+      "3205": "Lillestrøm"
+    },
+    "naeringskoder": [
+      "62.100",
+      "62.200",
+      "63.100"
+    ],
+    "min_ansatte": 10
+  },
+  "crawl": {
+    "workers": 16,
+    "timeout_seconds": 8,
+    "max_subpages": 4,
+    "cache_days": 7,
+    "career_cache_days": 1
+  },
+  "scoring": {
+    "_comment": "points = weight x number of distinct keywords found (max 'cap'). A trailing * matches any word ending. Short ALL-CAPS keywords (AI, KI, AWS) are matched case-sensitively.",
+    "groups": {
+      "ai": {
+        "label": "AI",
+        "weight": 8,
+        "cap": 3,
+        "keywords": [
+          "AI",
+          "KI",
+          "kunstig intelligens",
+          "artificial intelligence",
+          "maskinlæring*",
+          "machine learning",
+          "LLM",
+          "språkmodell*",
+          "generativ*",
+          "generative AI",
+          "data science",
+          "dyp læring",
+          "deep learning",
+          "MLOps",
+          "computer vision",
+          "NLP"
+        ]
+      },
+      "cloud": {
+        "label": "Cloud",
+        "weight": 6,
+        "cap": 3,
+        "keywords": [
+          "sky",
+          "skyen",
+          "skytjeneste*",
+          "skyløsning*",
+          "skyplattform*",
+          "skybasert*",
+          "skyteknologi*",
+          "cloud",
+          "Azure",
+          "AWS",
+          "GCP",
+          "Google Cloud",
+          "Kubernetes",
+          "DevOps",
+          "serverless"
+        ]
+      },
+      "thesis": {
+        "label": "Student thesis",
+        "weight": 20,
+        "cap": 2,
+        "keywords": [
+          "bacheloroppgave*",
+          "bachelorprosjekt*",
+          "bachelorgruppe*",
+          "bachelor thesis",
+          "studentoppgave*",
+          "studentprosjekt*",
+          "masteroppgave*",
+          "master thesis",
+          "prosjektoppgave*"
+        ]
+      },
+      "student": {
+        "label": "Takes students",
+        "weight": 8,
+        "cap": 3,
+        "keywords": [
+          "student*",
+          "sommerjobb*",
+          "sommerstudent*",
+          "summer intern*",
+          "internship*",
+          "graduate*",
+          "trainee*",
+          "nyutdanne*"
+        ]
+      }
+    },
+    "size_bonus": {
+      "min_ansatte": 20,
+      "max_ansatte": 500,
+      "points": 5
+    },
+    "past_oslomet_client_bonus": 10
+  },
+  "best_bets": 40,
+  "tags": {
+    "_comment": "Same keyword rules as scoring. A leading = makes a keyword case-sensitive.",
+    "tech": {
+      "Azure": [
+        "Azure"
+      ],
+      "AWS": [
+        "AWS",
+        "Amazon Web Services"
+      ],
+      "Google Cloud": [
+        "GCP",
+        "Google Cloud"
+      ],
+      "Kubernetes": [
+        "Kubernetes",
+        "OpenShift"
+      ],
+      "Docker": [
+        "Docker",
+        "container*",
+        "kontainer*"
+      ],
+      "Terraform": [
+        "Terraform",
+        "infrastructure as code"
+      ],
+      "LLM / GenAI": [
+        "LLM",
+        "språkmodell*",
+        "generativ*",
+        "GPT",
+        "ChatGPT",
+        "Copilot",
+        "OpenAI",
+        "RAG",
+        "genAI"
+      ],
+      "Machine learning": [
+        "maskinlæring*",
+        "machine learning",
+        "=ML",
+        "MLOps",
+        "dyp læring",
+        "deep learning"
+      ],
+      "Data platform": [
+        "dataplattform*",
+        "data platform*",
+        "datavarehus*",
+        "data warehouse",
+        "Databricks",
+        "Snowflake",
+        "data engineering",
+        "Fabric"
+      ],
+      "Analytics / BI": [
+        "Power BI",
+        "Tableau",
+        "business intelligence",
+        "analytics",
+        "dataanalyse*"
+      ],
+      "Python": [
+        "Python"
+      ],
+      "Java / Kotlin": [
+        "Java",
+        "Kotlin",
+        "Spring Boot"
+      ],
+      ".NET": [
+        ".NET",
+        "C#",
+        "dotnet"
+      ],
+      "JavaScript / React": [
+        "JavaScript",
+        "TypeScript",
+        "=React",
+        "Node.js",
+        "Vue",
+        "Angular"
+      ],
+      "IoT": [
+        "IoT",
+        "sensor*"
+      ],
+      "Security": [
+        "cybersikkerhet*",
+        "informasjonssikkerhet*",
+        "cybersecurity",
+        "cyber security",
+        "SOC",
+        "penetrasjonstest*",
+        "pentest*"
+      ],
+      "SAP": [
+        "SAP"
+      ],
+      "Salesforce": [
+        "Salesforce"
+      ],
+      "ServiceNow": [
+        "ServiceNow"
+      ],
+      "Microsoft 365": [
+        "Microsoft 365",
+        "M365",
+        "SharePoint",
+        "Dynamics 365",
+        "Power Platform"
+      ]
+    },
+    "sectors": {
+      "Public sector": [
+        "offentlig sektor",
+        "offentlige",
+        "kommuner",
+        "kommunen",
+        "etat*",
+        "public sector",
+        "forvaltning*",
+        "innbygger*"
+      ],
+      "Finance": [
+        "bank*",
+        "forsikring*",
+        "finans*",
+        "fintech",
+        "betaling*",
+        "insurance",
+        "banking",
+        "payments",
+        "regnskap*"
+      ],
+      "Health": [
+        "helse*",
+        "sykehus*",
+        "pasient*",
+        "health*",
+        "medisinsk*",
+        "medical"
+      ],
+      "Energy": [
+        "energi*",
+        "energy",
+        "kraftbransjen",
+        "kraftselskap*",
+        "fornybar*",
+        "renewable*",
+        "olje*",
+        "oil"
+      ],
+      "Security": [
+        "sikkerhet*",
+        "security",
+        "cybersecurity"
+      ],
+      "Transport & maritime": [
+        "maritim*",
+        "shipping",
+        "logistikk*",
+        "logistics",
+        "transport*",
+        "kollektiv*",
+        "mobilitet*"
+      ],
+      "Retail": [
+        "netthandel*",
+        "e-handel*",
+        "ehandel*",
+        "retail",
+        "dagligvare*",
+        "varehandel*",
+        "e-commerce"
+      ],
+      "Education": [
+        "utdanning*",
+        "skole*",
+        "e-læring",
+        "education",
+        "universitet*"
+      ],
+      "Media": [
+        "mediehus*",
+        "medier",
+        "media",
+        "publishing"
+      ],
+      "Property & construction": [
+        "eiendom*",
+        "real estate",
+        "construction",
+        "byggebransjen",
+        "byggenæring*"
+      ]
+    }
+  },
+  "ideas": [
+    {
+      "sector": "Public sector",
+      "en": "An AI assistant that answers questions from guidelines and case-handling rules (retrieval over their own documents), with source references and an evaluation of answer quality.",
+      "no": "en KI-assistent som svarer på spørsmål ut fra retningslinjer og saksbehandlingsregler (søk i egne dokumenter), med kildehenvisninger og en evaluering av svarkvaliteten"
+    },
+    {
+      "sector": "Finance",
+      "en": "A prototype that uses a language model to sort and summarise customer inquiries or documents, with attention to privacy and traceability.",
+      "no": "en prototype som bruker en språkmodell til å sortere og oppsummere kundehenvendelser eller dokumenter, med vekt på personvern og sporbarhet"
+    },
+    {
+      "sector": "Health",
+      "en": "A documentation or decision-support prototype using a language model on synthetic health data, built with privacy by design.",
+      "no": "en prototype for dokumentasjons- eller beslutningsstøtte som bruker en språkmodell på syntetiske helsedata, med innebygd personvern"
+    },
+    {
+      "sector": "Energy",
+      "en": "A cloud data pipeline with machine-learning forecasting or anomaly detection on sensor and time-series data.",
+      "no": "en dataflyt i skyen med maskinlæring for prognoser eller avviksdeteksjon på sensor- og tidsseriedata"
+    },
+    {
+      "sector": "Security",
+      "en": "A language-model-assisted tool for triaging security alerts or log data, running in a cloud environment.",
+      "no": "et verktøy som bruker en språkmodell til å prioritere sikkerhetsvarsler eller loggdata, kjørt i et skymiljø"
+    },
+    {
+      "sector": "Transport & maritime",
+      "en": "Machine learning on operational data (arrival times, routes or demand), served from a cloud API with a simple dashboard.",
+      "no": "maskinlæring på driftsdata (ankomsttider, ruter eller etterspørsel), levert fra et API i skyen med et enkelt dashbord"
+    },
+    {
+      "sector": "Retail",
+      "en": "A demand-forecast or recommendation prototype on sales data, deployed as a cloud service.",
+      "no": "en prototype for etterspørselsprognoser eller anbefalinger basert på salgsdata, levert som en skytjeneste"
+    },
+    {
+      "ai": true,
+      "cloud": true,
+      "en": "An internal AI assistant over the company's own documentation, built on their cloud platform, with an evaluation of answer quality and cost.",
+      "no": "en intern KI-assistent over deres egen dokumentasjon, bygget på skyplattformen dere bruker, med en evaluering av svarkvalitet og kostnad"
+    },
+    {
+      "cloud": true,
+      "en": "A cloud cost and usage tool: collect usage data, detect anomalies with machine learning and suggest savings.",
+      "no": "et verktøy for skykostnader og bruk: samle inn bruksdata, oppdage avvik med maskinlæring og foreslå besparelser"
+    },
+    {
+      "ai": true,
+      "en": "A comparison of language models on one of their real tasks, with a test harness they can keep using.",
+      "no": "en sammenligning av språkmodeller på en av deres reelle oppgaver, med et testoppsett dere kan bruke videre"
+    },
+    {
+      "en": "A small internal tool or prototype from their backlog that nobody has had time to build, using AI or cloud where it fits.",
+      "no": "et internt verktøy eller en prototype fra backloggen som ingen har rukket å bygge, med KI eller sky der det passer"
+    }
+  ],
+  "internship_keywords": [
+    "internship*",
+    "summer intern*",
+    "sommerjobb*",
+    "sommerstudent*",
+    "sommerprosjekt*",
+    "summer job*",
+    "sommerintern*",
+    "praksisplass*",
+    "deltidsjobb*",
+    "studentjobb*",
+    "trainee*",
+    "graduate program*"
+  ],
+  "listings": {
+    "_comment": "Real job openings for students. An ad is kept when its title matches one of the types, it is in one of the areas, and it is IT-relevant (IT job category, an it_title word in the title, or three it_strong words in the text).",
+    "days_back": 90,
+    "areas": [
+      "OSLO",
+      "BÆRUM",
+      "ASKER",
+      "LILLESTRØM",
+      "LØRENSKOG",
+      "NORDRE FOLLO",
+      "LYSAKER",
+      "FORNEBU",
+      "SANDVIKA"
+    ],
+    "types": {
+      "thesis": {
+        "label": "Thesis",
+        "keywords": [
+          "bacheloroppgave*",
+          "masteroppgave*",
+          "bachelor thesis",
+          "master thesis",
+          "studentoppgave*",
+          "thesis"
+        ]
+      },
+      "summer": {
+        "label": "Summer job / internship",
+        "keywords": [
+          "sommerjobb*",
+          "sommerstudent*",
+          "sommerintern*",
+          "sommerprosjekt*",
+          "sommer 20*",
+          "sommeren 20*",
+          "summer intern*",
+          "summer job*",
+          "summer student*",
+          "summer associate*",
+          "summer analyst*",
+          "summer 20*",
+          "sommervikar*"
+        ]
+      },
+      "graduate": {
+        "label": "Trainee / graduate",
+        "keywords": [
+          "trainee*",
+          "graduate*",
+          "nyutdann*",
+          "new grad*",
+          "early career*"
+        ]
+      },
+      "intern": {
+        "label": "Internship",
+        "keywords": [
+          "internship*",
+          "interns",
+          "praktikant*",
+          "praksisplass*",
+          "praksisstudent*"
+        ]
+      },
+      "parttime": {
+        "label": "Part-time student job",
+        "keywords": [
+          "studentjobb*",
+          "studentstilling*",
+          "studentmedarbeider*",
+          "studentassistent*",
+          "deltidsstudent*",
+          "student",
+          "studenter",
+          "students",
+          "studentutvikler*",
+          "student developer*"
+        ]
+      }
+    },
+    "it_title": [
+      "utvikl*",
+      "developer*",
+      "software",
+      "programvare*",
+      "programmer*",
+      "IT",
+      "IKT",
+      "data*",
+      "tech*",
+      "teknolog*",
+      "AI",
+      "KI",
+      "ML",
+      "cloud",
+      "skytjeneste*",
+      "skyplattform*",
+      "sikkerhet*",
+      "security",
+      "cyber*",
+      "devops",
+      "frontend",
+      "backend",
+      "fullstack",
+      "full stack",
+      "systemutvikl*",
+      "engineer*",
+      "digital*",
+      "informatikk*",
+      "analytics",
+      "maskinlæring*",
+      "machine learning",
+      "robotics",
+      "nettverk*",
+      "kryptologi*",
+      "systemer",
+      "system",
+      "web",
+      "app",
+      "apper",
+      "utvikling"
+    ],
+    "it_strong": [
+      "utvikler*",
+      "developer*",
+      "programmering*",
+      "programming",
+      "software",
+      "programvare*",
+      "python",
+      "java",
+      "javascript",
+      "typescript",
+      "cloud",
+      "maskinlæring*",
+      "machine learning",
+      "cybersikkerhet*",
+      "cybersecurity",
+      "devops",
+      "frontend",
+      "backend",
+      "fullstack",
+      "data science",
+      "informatikk*",
+      "datateknologi*",
+      "computer science",
+      "kunstig intelligens",
+      "artificial intelligence",
+      "systemutvikling*",
+      "kubernetes",
+      "azure",
+      "AWS"
+    ]
+  },
+  "profil": {
+    "_comment": "Who is applying. Used to hide positions that would not accept you. nivaa: bachelor or master. ferdig: the year you graduate.",
+    "studieprogram": "informasjonsteknologi",
+    "nivaa": "bachelor",
+    "ferdig": 2027,
+    "studiested": "OsloMet"
+  },
+  "bachelor": true,
+  "epost": {
+    "_comment": "Inbox that receives finn.no / LinkedIn job alerts. Set with 'Koble til e-post.command'; the password is in the macOS Keychain, not here.",
+    "adresse": "",
+    "imap_server": "imap.gmail.com",
+    "dager_tilbake": 30
+  }
+}

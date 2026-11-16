@@ -1,0 +1,189 @@
+{
+  "_about": {
+    "does": "Hand-written notes for the shortlist, written 2026-11-16 from each organisation's website text. 'idea' is a suggested project to open the conversation with, not something the organisation has asked for. Optional fields: tier (override), hide_quote, skip."
+  },
+
+  "993856886": {
+    "does": "Security company that monitors and protects IT systems and critical infrastructure around the clock. Says it has had students doing bachelor and master theses for years.",
+    "idea": "A language-model assistant for their security analysts that summarises and prioritises incoming alerts, tested on public attack datasets and run in a closed cloud environment.",
+    "idea_no": "en språkmodell-assistent som oppsummerer og prioriterer sikkerhetsvarsler for analytikerne deres, testet på åpne angrepsdatasett og kjørt i et lukket skymiljø"
+  },
+  "983163327": {
+    "does": "Digital identity, certificates, signing and payment services. Writes that it facilitates both master and bachelor theses with close follow-up.",
+    "idea": "Machine learning that detects unusual login or signing patterns in (synthetic) authentication logs, delivered as a cloud service with an explanation of each flag.",
+    "idea_no": "maskinlæring som oppdager uvanlige innloggings- eller signeringsmønstre i (syntetiske) autentiseringslogger, levert som en skytjeneste med forklaring på hvert varsel"
+  },
+  "993884871": {
+    "does": "IT company working largely for the energy sector. Invites students to email karriere@embriq.no about thesis collaboration.",
+    "idea": "Forecasting or anomaly detection on smart-meter time series, built as a cloud data pipeline with a small dashboard.",
+    "idea_no": "prognoser eller avviksdeteksjon på tidsserier fra smarte strømmålere, bygget som en dataflyt i skyen med et lite dashbord"
+  },
+  "893136932": {
+    "does": "Supplies ArcGIS, geographic data and GIS consulting for public and private sector. Students have discussed bachelor and master thesis ideas with them at their events.",
+    "idea": "Ask map data questions in plain Norwegian: a language model that turns a question into a GIS query and shows the answer on a map.",
+    "idea_no": "å stille spørsmål til kartdata på vanlig norsk: en språkmodell som gjør spørsmålet om til en GIS-spørring og viser svaret på et kart"
+  },
+  "seed:simula.no": {
+    "does": "Research lab in ICT; SimulaMet is run together with OsloMet. Thesis offers on the site are aimed at master students, so ask whether a bachelor group can take a scoped part of a research project.",
+    "idea": "A reproducible machine-learning pipeline in the cloud for one of their research groups: data intake, training, evaluation and a results dashboard.",
+    "idea_no": "en reproduserbar maskinlæringspipeline i skyen for en av forskningsgruppene: datainntak, trening, evaluering og et resultatdashbord"
+  },
+  "seed:sintef.no": {
+    "does": "Large applied research institute. SINTEF Digital publishes a list of available master theses; ask whether a bachelor group can take a smaller piece of one.",
+    "idea": "A working prototype around one of their listed thesis topics, for example a machine-learning model served from a cloud API with a simple user interface.",
+    "idea_no": "en fungerende prototype rundt et av de utlyste oppgavetemaene deres, for eksempel en maskinlæringsmodell levert fra et API i skyen med et enkelt brukergrensesnitt"
+  },
+  "seed:met.no": {
+    "tier": "students",
+    "hide_quote": true,
+    "does": "The Norwegian Meteorological Institute. Publishes large amounts of open weather data through free APIs. The thesis mention on their site is an employee anecdote, not an offer, so ask.",
+    "idea": "AI and sky, literally: short-term cloud-cover forecasting from their open satellite and observation data, trained and served in the cloud.",
+    "idea_no": "KI og sky i dobbel forstand: korttidsvarsling av skydekke fra deres åpne satellitt- og observasjonsdata, trent og levert i skyen"
+  },
+  "931549383": {
+    "tier": "none",
+    "hide_quote": true,
+    "does": "Strategy and technology advisers and developers. Ranked high only because an article on their site discusses master theses; no sign that they host students."
+  },
+
+  "seed:statnett.no": {
+    "does": "Owns and runs the national power grid. Offers trainee positions, summer jobs and the KUBE summer project for students.",
+    "idea": "Machine-learning forecasts of grid load or imbalance from their open data, run as a cloud pipeline and compared against simple baselines.",
+    "idea_no": "maskinlæringsprognoser for forbruk eller ubalanse i strømnettet basert på deres åpne data, kjørt som en dataflyt i skyen og sammenlignet med enkle referansemodeller"
+  },
+  "seed:digdir.no": {
+    "does": "The Norwegian Digitalisation Agency. Has an 'Ung i Digdir' programme for apprentices, students and new graduates.",
+    "idea": "An AI assistant that answers questions about public-sector digitalisation requirements (for example accessibility rules) with references to the source text.",
+    "idea_no": "en KI-assistent som svarer på spørsmål om krav til offentlig digitalisering (for eksempel universell utforming) med henvisning til kildeteksten"
+  },
+  "920855970": {
+    "does": "Maritime software built on ship-tracking and market data. Says it works closely with universities and offers internships and part-time work.",
+    "idea": "Machine learning on ship-tracking data: predict arrival times or port congestion, served from a cloud API.",
+    "idea_no": "maskinlæring på skipssporingsdata: forutsi ankomsttider eller kø i havner, levert fra et API i skyen"
+  },
+  "934161181": {
+    "does": "Geographic IT and data for municipalities, state and businesses. Has a 'Student i Norkart' page.",
+    "idea": "An AI assistant for zoning plans and building applications: find and explain the rules that apply to a given property.",
+    "idea_no": "en KI-assistent for reguleringsplaner og byggesaker: finn og forklar hvilke bestemmelser som gjelder for en gitt eiendom"
+  },
+  "929285093": {
+    "does": "Small consultancy in AI, data science and software for clients such as Hydro, Helsedirektoratet and Digdir. Says it hires students and new graduates.",
+    "idea": "A test setup that measures how well different language models handle Norwegian public-sector text, reusable in their client projects.",
+    "idea_no": "et testoppsett som måler hvor godt ulike språkmodeller håndterer norsk forvaltningstekst, som kan gjenbrukes i kundeprosjektene deres"
+  },
+  "930377953": {
+    "does": "Small Oslo consultancy in full-stack development, data engineering and AI, mostly on Azure. Consultants have supervised summer students.",
+    "idea": "An AI tool that drafts tailored consultant CVs and offers from past project descriptions, built on Azure.",
+    "idea_no": "et KI-verktøy som lager utkast til tilpassede konsulent-CV-er og tilbud ut fra tidligere prosjektbeskrivelser, bygget på Azure"
+  },
+  "935447143": {
+    "does": "Small company building digital products for clients: product development, design and AI.",
+    "idea": "A reusable starter kit for AI features (document search and agents) on AWS or Azure that they can drop into client products.",
+    "idea_no": "et gjenbrukbart startsett for KI-funksjoner (dokumentsøk og agenter) på AWS eller Azure som kan brukes i kundeprosjektene deres"
+  },
+  "seed:knowit.no": {
+    "does": "Large consultancy across development, data and cloud. Has a talent programme and summer students.",
+    "idea": "An internal assistant that searches project references and consultant skills to help staff new projects.",
+    "idea_no": "en intern assistent som søker i prosjektreferanser og konsulentkompetanse for å hjelpe med bemanning av nye prosjekter"
+  },
+  "seed:bouvet.no": {
+    "does": "One of the largest Nordic consultancies, with summer jobs for 2027 listed and openings for developers working with AI-driven development.",
+    "idea": "Measure what AI coding agents actually do for a development team: set up agents on a real codebase and compare speed and quality with and without.",
+    "idea_no": "å måle hva KI-kodeagenter faktisk gir et utviklingsteam: sette opp agenter på en reell kodebase og sammenligne fart og kvalitet med og uten"
+  },
+  "seed:intility.no": {
+    "does": "Oslo cloud platform company running IT for more than 700 companies. Has programmes for students and new graduates.",
+    "idea": "An AI assistant for IT operations that summarises incidents and suggests fixes from earlier tickets, running on their own platform.",
+    "idea_no": "en KI-assistent for IT-drift som oppsummerer hendelser og foreslår løsninger ut fra tidligere saker, kjørt på deres egen plattform"
+  },
+  "seed:visma.no": {
+    "does": "Group of business software companies (accounting, payroll, invoicing). Offers summer internships and trainee programmes.",
+    "idea": "Compare language models on reading invoices and receipts, with a test set and a cost-per-document measure.",
+    "idea_no": "en sammenligning av språkmodeller på tolking av fakturaer og kvitteringer, med et testsett og et mål på kostnad per dokument"
+  },
+  "922105243": {
+    "does": "Consultancy in development, design and advisory. Has a separate student application form on its careers page.",
+    "idea": "An AI assistant for one of their public-sector or health clients that answers from the client's own guidelines, built on Azure.",
+    "idea_no": "en KI-assistent for en av kundene deres i offentlig sektor eller helse som svarer ut fra kundens egne retningslinjer, bygget på Azure"
+  },
+  "912721825": {
+    "hide_quote": true,
+    "does": "Microsoft consultancy: Microsoft 365, Power Platform and Dynamics 365. At least one employee started there as a student.",
+    "idea": "An AI agent inside Microsoft 365 that handles one real internal process end to end, with a measured before and after.",
+    "idea_no": "en KI-agent i Microsoft 365 som håndterer én reell intern prosess fra start til slutt, med måling av før og etter"
+  },
+  "984489234": {
+    "does": "Business systems consultancy (ERP, CRM, BI) with a six-month trainee programme.",
+    "idea": "Sales or cash-flow forecasting with machine learning on business-system data, shown in a BI dashboard.",
+    "idea_no": "salgs- eller likviditetsprognoser med maskinlæring på data fra forretningssystemer, vist i et BI-dashbord"
+  },
+  "991742255": {
+    "does": "Internal IT provider for the Orkla group's companies. Says it has openings for recent graduates.",
+    "idea": "A helpdesk assistant that answers employees' IT questions from internal documentation and routes the rest to the right team.",
+    "idea_no": "en brukerstøtte-assistent som svarer på ansattes IT-spørsmål ut fra intern dokumentasjon og sender resten til riktig team"
+  },
+  "971047917": {
+    "does": "IT company for the NorgesGruppen grocery group. Runs a summer internship.",
+    "idea": "Demand forecasting to cut food waste: predict sales per product and store from (sample) sales data, served from the cloud.",
+    "idea_no": "etterspørselsprognoser for å redusere matsvinn: forutsi salg per vare og butikk fra (eksempel)salgsdata, levert fra skyen"
+  },
+  "916260229": {
+    "does": "Maritime technology company working with vessel data. Has a graduate programme.",
+    "idea": "Predict fuel use or emissions for a voyage from vessel and weather data, with a cloud dashboard.",
+    "idea_no": "å forutsi drivstofforbruk eller utslipp for en seilas ut fra fartøys- og værdata, med et dashbord i skyen"
+  },
+  "919697199": {
+    "does": "AI-driven low-code platform for building business apps from a prompt. Reports 44 completed internships.",
+    "idea": "Build a real business app on their platform and measure how well the AI generation works: what it gets right, what needs manual fixing.",
+    "idea_no": "å bygge en reell forretningsapp på plattformen deres og måle hvor godt KI-genereringen fungerer: hva den får til, og hva som må rettes manuelt"
+  },
+  "984066910": {
+    "does": "Mobile messaging (SMS and chat) platform for businesses. Careers page welcomes students.",
+    "idea": "Machine learning that detects fraud and spam messages in SMS traffic, tested on public datasets.",
+    "idea_no": "maskinlæring som oppdager svindel- og spam-meldinger i SMS-trafikk, testet på åpne datasett"
+  },
+  "seed:soprasteria.no": {
+    "does": "Large consultancy in digitalisation, with large public and private clients and its own student technology competition."
+  },
+  "931190628": {
+    "hide_quote": true,
+    "does": "Large Nordic IT services company. The student mention on the site is a news item, so check their careers page for student offers."
+  },
+  "983781233": {
+    "hide_quote": true,
+    "does": "Industry software group (construction, energy, health, schools). The student mention on the site is about school software, so check their careers page."
+  },
+  "982506395": {
+    "skip": true,
+    "does": "Part of the EG group (construction software). See EG Norge AS; one contact covers both."
+  },
+  "922073902": {
+    "skip": true,
+    "does": "Recruitment and staffing agency. Not a project host."
+  },
+  "933574032": {
+    "skip": true,
+    "does": "Paid academy for newly graduated developers. Relevant for a job after the degree, not as a project host."
+  },
+
+  "seed:husbanken.no": {
+    "does": "The Norwegian State Housing Bank. An earlier OsloMet bachelor group built a chatbot for them. The public site was read, so no student signal was found; ask directly.",
+    "idea": "A follow-up to the earlier chatbot: an assistant that answers questions about loan and grant schemes with source references, plus a proper evaluation.",
+    "idea_no": "en videreføring av den tidligere chatboten: en assistent som svarer på spørsmål om låne- og tilskuddsordninger med kildehenvisninger, og en grundig evaluering"
+  },
+  "seed:telia.no": {
+    "does": "Telecom operator. OneCall (Telia) was client for an OsloMet bachelor group in 2022. Only the consumer site was read, so no student signal was found; ask via their careers contact.",
+    "idea": "An internal tool that uses a language model to sort and summarise customer inquiries, as a follow-up to the kind of internal application the 2022 group built.",
+    "idea_no": "et internt verktøy som bruker en språkmodell til å sortere og oppsummere kundehenvendelser"
+  },
+  "seed:99x.io": {
+    "does": "Software development company; 99X.no AS was client for an OsloMet bachelor group in 2018. Says its recent work is increasingly about AI in testing and data analysis.",
+    "idea": "AI-assisted test generation for a real product: generate tests from requirements and measure how many real defects they catch.",
+    "idea_no": "KI-assistert testgenerering for et reelt produkt: generere tester fra krav og måle hvor mange reelle feil de fanger"
+  },
+  "seed:computas.com": {
+    "does": "Oslo consultancy. Its website blocks scripts, so nothing was read automatically; from general knowledge it is known for Google Cloud and AI work. Check the site yourself.",
+    "idea": "An AI assistant over a client's or their own documentation on Google Cloud, with an evaluation of answer quality and cost.",
+    "idea_no": "en KI-assistent over egen eller en kundes dokumentasjon på Google Cloud, med en evaluering av svarkvalitet og kostnad"
+  }
+}

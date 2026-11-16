@@ -1,0 +1,8 @@
+# Generated on every run
+cache/
+results.html
+results.csv
+internships.csv
+__pycache__/
+*.pyc
+.DS_Store

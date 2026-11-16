@@ -1,0 +1,20 @@
+Emne: Bacheloroppgave {semester} – tre studenter fra OsloMet
+
+Hei,
+
+Vi er tre studenter på {studieprogram} ved OsloMet som skal skrive bacheloroppgave {semester}, og vi ser etter en oppdragsgiver. Vi ønsker å fordype oss i kunstig intelligens og skyteknologi, og tar kontakt med {firma} fordi {grunn}.
+
+Kort om opplegget:
+- Vi jobber med prosjektet fra januar til mai, tilsvarende 20 studiepoeng per student.
+- Dere foreslår en problemstilling eller et internt behov, og stiller med en kontaktperson vi kan møte jevnlig.
+- OsloMet gir oss egen veileder, og det inngås en standard prosjektavtale mellom dere, oss og OsloMet.
+- Det koster dere ingenting utover tiden til kontaktpersonen.
+
+En idé vi har tenkt på er {ide}. Vi har ikke låst oss til et tema ennå, så vi tilpasser oss gjerne noe dere faktisk har bruk for.
+
+Har dere mulighet til en kort prat i løpet av de neste ukene? Vi sender gjerne CV-er og karakterutskrifter.
+
+Vennlig hilsen
+{navn}
+{kontakt_epost}
+{telefon}
